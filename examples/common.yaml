@@ -1,6 +1,7 @@
-- task
-  repo: lyleshaw/go-best-practice
-  repoType: github
-  recevier: oc_a0553eda9014c201e6969b478895c230
-  recevierType: group
-  pushChannel: lark
+tasks:
+  - name: "Task 1"
+    repo: lyleshaw/go-best-practice
+    repoType: github
+    recevier: oc_a0553eda9014c201e6969b478895c230
+    recevierType: group
+    pushChannel: lark

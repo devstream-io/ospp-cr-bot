@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/lyleshaw/ospp-cr-bot/internal/pkg/config"
 	"github.com/lyleshaw/ospp-cr-bot/internal/pkg/eventListener"
+	"github.com/lyleshaw/ospp-cr-bot/internal/pkg/pushChannel/lark"
 	"github.com/lyleshaw/ospp-cr-bot/pkg/utils/log"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
 var (
@@ -13,13 +15,7 @@ var (
 
 func init() {
 	initLog()
-	initConfig()
-}
-func initConfig() {
-	viper.AutomaticEnv()
-	if err := viper.BindEnv("lark_access_token"); err != nil {
-		log.Fatal(err)
-	}
+	config.InitConfig()
 }
 
 func initLog() {
@@ -32,8 +28,12 @@ func initLog() {
 }
 
 func main() {
-	err := eventListener.Init()
+	router := gin.Default()
+	router.POST("/github/webhook", eventListener.GitHubWebHook)
+	router.POST("/api/lark/callback", lark.Callback)
+	err := router.Run(":3000")
 	if err != nil {
-		log.Fatal(err.Error())
+		return
 	}
+	return
 }

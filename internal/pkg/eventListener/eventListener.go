@@ -4,8 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/lyleshaw/ospp-cr-bot/internal/pkg/config"
+	"github.com/valyala/fasttemplate"
 	"io/ioutil"
 	"net/url"
+	"strconv"
+
+	"github.com/lyleshaw/ospp-cr-bot/internal/pkg/pushChannel/lark"
 )
 
 // Event defines a GitHub hook event type
@@ -31,7 +36,6 @@ func GitHubWebHook(c *gin.Context) {
 	body, _ := ioutil.ReadAll(c.Request.Body)
 	bodyStr := string(body)
 	bodyStr = bodyStr[8:]
-	fmt.Printf("%s\n", bodyStr)
 	bodyStr, _ = url.QueryUnescape(bodyStr)
 
 	gitHubEvent := Event(event)
@@ -52,10 +56,19 @@ func GitHubWebHook(c *gin.Context) {
 	case PullRequestEvent:
 		var req PullRequestPayload
 		_ = json.Unmarshal([]byte(bodyStr), &req)
-		// Do whatever you want from here...
-		fmt.Printf("%+v\n", req)
-		fmt.Printf("%s\n", req.PullRequest.Head.Repo.FullName)
-		fmt.Printf("%s\n", req.PullRequest.Head.User.Login)
+		t := fasttemplate.New(lark.SEND_PR_MSG, "{{", "}}")
+		prMsg := t.ExecuteString(map[string]interface{}{
+			"Time":     req.PullRequest.CreatedAt.Format("2006年01月02日 15:04:05"),
+			"PRTitle":  req.PullRequest.Title,
+			"Login":    req.PullRequest.User.Login,
+			"PRNumber": strconv.FormatInt(req.PullRequest.Number, 10),
+			"PRURL":    req.PullRequest.HTMLURL,
+		})
+		receiveID, err := config.QueryReceiveIDByRepo(req.Repository.FullName)
+		if err != nil {
+			return
+		}
+		lark.SendMessage(receiveID, prMsg)
 	case PullRequestReviewEvent:
 		var req PullRequestReviewPayload
 		_ = json.Unmarshal([]byte(bodyStr), &req)
@@ -71,16 +84,5 @@ func GitHubWebHook(c *gin.Context) {
 		fmt.Printf("%s\n", req.PullRequest.Head.Repo.FullName)
 		fmt.Printf("%s\n", req.PullRequest.Head.User.Login)
 	}
-
 	c.JSON(200, nil)
-}
-
-func Init() error {
-	router := gin.Default()
-	router.POST("/github/webhook", GitHubWebHook)
-	err := router.Run(":3000")
-	if err != nil {
-		return err
-	}
-	return nil
 }
