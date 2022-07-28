@@ -4,6 +4,10 @@
 *.dll
 *.so
 *.dylib
+.env
+.idea
+.DS_Store
+common.yaml
 
 # Test binary, built with `go test -c`
 *.test
