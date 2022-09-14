@@ -8,6 +8,7 @@ import (
 	"github.com/lyleshaw/ospp-cr-bot/internal/pkg/pushChannel/lark/messageTemplate"
 	"github.com/lyleshaw/ospp-cr-bot/pkg/utils/log"
 	"github.com/valyala/fasttemplate"
+	"io/ioutil"
 	"strings"
 )
 
@@ -67,21 +68,20 @@ func Callback(c *gin.Context) {
 }
 
 func CardCallback(c *gin.Context) {
-	//var req DecodeCallBackReq
-	var cardPostReq CardPostReq
-	//err := c.Bind(&req)
-	//if err == nil {
-	//	log.Infof("req:%+v\n", req)
-	//	callBackResp := CallBackResp{
-	//		Challenge: req.Challenge,
-	//	}
-	//	log.Infof("%+v", callBackResp)
-	//	c.JSON(200, req)
-	//	return
-	//}
+	reqStr, _ := ioutil.ReadAll(c.Request.Body)
+	log.Infof("reqStr: %s", reqStr)
+	if strings.Contains(string(reqStr), "url_verification") {
+		var req DecodeCallBackReq
+		_ = json.Unmarshal(reqStr, &req)
+		log.Infof("req:%+v\n", req)
+		c.JSON(200, req)
+		return
+	}
 
-	err := c.Bind(&cardPostReq)
+	var cardPostReq CardPostReq
+	err := json.Unmarshal(reqStr, &cardPostReq)
 	if err != nil {
+		log.Errorf("err: %+v\n", err)
 		log.Errorf("err: %s\n", err.Error())
 		return
 	}
