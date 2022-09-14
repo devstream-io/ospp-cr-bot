@@ -20,7 +20,6 @@ type Config struct {
 type Tasks struct {
 	Name         string `yaml:"name"`
 	Repo         string `yaml:"repo"`
-	RepoType     string `yaml:"repoType"`
 	Receiver     string `yaml:"receiver"`
 	ReceiverType string `yaml:"receiverType"`
 	PushChannel  string `yaml:"pushChannel"`

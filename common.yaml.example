@@ -3,7 +3,6 @@ tasks:
     repo: lyleshaw/repoTest
     repoType: github
     receiver: oc_xxxxxxxx
-    receiverType: group
     pushChannel: lark
 
 maps:

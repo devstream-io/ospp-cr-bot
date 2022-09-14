@@ -2,7 +2,6 @@ package lark
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -73,7 +72,6 @@ func init() {
 				"app_id":"` + FeishuConfig["AppId"] + `",
 				"app_secret":"` + FeishuConfig["AppSecret"] + `"
 			}`
-			fmt.Println(payload)
 			req, _ := http.NewRequest(http.MethodPost, feishu.ServerUrl+"/open-apis/auth/v3/tenant_access_token/internal/", strings.NewReader(payload))
 
 			return req
