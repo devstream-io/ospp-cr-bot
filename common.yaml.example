@@ -1,0 +1,18 @@
+tasks:
+  - name: "Task 1"
+    repo: lyleshaw/repoTest
+    repoType: github
+    receiver: oc_xxxxxxxx
+    pushChannel: lark
+
+maps:
+  - name: "1"
+    github: lyleshaw
+    lark: ou_xxxxxx
+    role: member
+    boss: 0
+  - name: "2"
+    github: abc
+    lark: ou_xxxxxx
+    role: contributor
+    boss: lyleshaw
