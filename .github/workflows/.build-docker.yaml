@@ -21,6 +21,8 @@ jobs:
       - name: Login Resigtry
         if: github.event_name == 'push'
         run: |
+          echo ${{ secrets.REGISTRY_USERNAME }}
+          echo ${{ secrets.REGISTRY_PASSWORD }}
           docker login ccr.ccs.tencentyun.com --username=${{ secrets.REGISTRY_USERNAME }} --password=${{ secrets.REGISTRY_PASSWORD }}
       - name: Build
         env:
