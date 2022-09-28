@@ -1,0 +1,27 @@
+tasks:
+  - name: "Task 1"
+    repo: lyleshaw/repoTest
+    repoType: github
+    receiver: oc_3f96455148ce46f993da675c96548812
+    pushChannel: lark
+  - name: "Task 2"
+    repo: lyleshaw/gobestpractice
+    repoType: github
+    receiver: oc_3f96455148ce46f993da675c96548812
+    pushChannel: lark
+maps:
+  - name: "1"
+    github: lyleshaw
+    lark: ou_c1cf4cfa9f0b25110808eeb649422fca
+    role: member
+    boss: 0
+  - name: "2"
+    github: wyqw0522
+    lark: ou_0f89e919a57dcf16d8c5fdcee68b4161
+    role: contributor
+    boss: lyleshaw
+scheduler:
+  - timeUnread1: 30
+  - timeUnread2: 30
+  - timeUnread3: 660
+  - commentUnread: 60
