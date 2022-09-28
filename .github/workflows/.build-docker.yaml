@@ -9,6 +9,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    environment: cr-bot-build-docker
     env:
       GO111MODULE: on
     steps:
@@ -21,9 +22,7 @@ jobs:
       - name: Login Resigtry
         if: github.event_name == 'push'
         run: |
-          echo ${{ secrets.REGISTRY_USERNAME }}
-          echo ${{ secrets.REGISTRY_PASSWORD }}
-          docker login ccr.ccs.tencentyun.com --username=${{ secrets.REGISTRY_USERNAME }} --password=${{ secrets.REGISTRY_PASSWORD }}
+          echo ${{ secrets.REGISTRY_PASSWORD }} | docker login ccr.ccs.tencentyun.com -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
       - name: Build
         env:
           LarkAppId: ${{ secrets.LARKAPPID }}
