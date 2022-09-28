@@ -16,3 +16,9 @@ maps:
     lark: ou_xxxxxx
     role: contributor
     boss: lyleshaw
+
+scheduler:
+  - timeUnread1: 30
+  - timeUnread2: 30
+  - timeUnread3: 660
+  - commentUnread: 60

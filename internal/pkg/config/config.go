@@ -14,8 +14,9 @@ var (
 )
 
 type Config struct {
-	Tasks []Tasks `yaml:"tasks"`
-	Maps  []Maps  `yaml:"maps"`
+	Tasks     []Tasks   `yaml:"tasks"`
+	Maps      []Maps    `yaml:"maps"`
+	Scheduler Scheduler `yaml:"scheduler"`
 }
 type Tasks struct {
 	Name         string `yaml:"name"`
@@ -30,6 +31,13 @@ type Maps struct {
 	Lark   string `yaml:"lark"`
 	Role   string `yaml:"role"`
 	Boss   string `yaml:"boss"`
+}
+
+type Scheduler struct {
+	TimeUnread1   int `yaml:"timeUnread1"`
+	TimeUnread2   int `yaml:"timeUnread2"`
+	TimeUnread3   int `yaml:"timeUnread3"`
+	CommentUnread int `yaml:"commentUnread"`
 }
 
 func InitConfig() {

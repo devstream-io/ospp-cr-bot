@@ -19,9 +19,9 @@ var (
 	createMessageURL = "https://open.feishu.cn/open-apis/im/v1/messages"
 )
 
-func MsgTemplateUpgrade(msgTemplate string, receiver string) string {
-	msgTemplate = strings.Replace(msgTemplate, messageTemplate.PrTitle1, fmt.Sprintf(messageTemplate.PrTitle2, receiver), -1)
-	msgTemplate = strings.Replace(msgTemplate, messageTemplate.IssueTitle1, fmt.Sprintf(messageTemplate.IssueTitle2, receiver), -1)
+func MsgTemplateUpgrade(msgTemplate string) string {
+	msgTemplate = strings.Replace(msgTemplate, messageTemplate.PrTitle1, messageTemplate.PrTitle2, -1)
+	msgTemplate = strings.Replace(msgTemplate, messageTemplate.IssueTitle1, messageTemplate.IssueTitle2, -1)
 	msgTemplate = strings.Replace(msgTemplate, messageTemplate.PrCommentTitle1, messageTemplate.PrCommentTitle2, -1)
 	msgTemplate = strings.Replace(msgTemplate, messageTemplate.IssueCommentTitle1, messageTemplate.IssueCommentTitle2, -1)
 	msgTemplate = strings.Replace(msgTemplate, messageTemplate.PrReviewTitle1, messageTemplate.PrReviewTitle2, -1)
@@ -200,17 +200,18 @@ func TimeCheck2(receiveID string, receivers []string, msgTemplate string, number
 			if config.MsgQueue[receiver+number+gitHubEvent] == constants.Unread2 {
 				// 如果第二次未读，则调整状态为第三次未读，并发送消息给上级
 				config.MsgQueue[receiver+number+gitHubEvent] = constants.Unread3
-				msgTemplate = MsgTemplateUpgrade(msgTemplate, receiver)
+				msgTemplate = MsgTemplateUpgrade(msgTemplate)
+				msgTemplate_ := fmt.Sprintf(msgTemplate, receiver)
 				if config.LarkMaps[receiver].Boss == "0" {
-					_, err := SendGroupMessage(receiveID, msgTemplate)
+					_, err := SendGroupMessage(receiveID, msgTemplate_)
 					if err != nil {
 						log.Errorf("send message error: %+v", err)
 					}
 					continue
 				}
-				_, err := SendMessage(config.LarkMaps[config.LarkMaps[receiver].Boss].Lark, msgTemplate)
+				_, err := SendMessage(config.LarkMaps[config.LarkMaps[receiver].Boss].Lark, msgTemplate_)
 				if err != nil {
-					log.Errorf("send message failed, msgTemplate=%s, receivers=%+v, gitHubEvent=%s", msgTemplate, receivers, gitHubEvent)
+					log.Errorf("send message failed, msgTemplate=%s, receivers=%+v, gitHubEvent=%s", msgTemplate_, receivers, gitHubEvent)
 					log.Errorf("send message failed, err=%v", err)
 				}
 				log.Infof("msgQ=%v", config.MsgQueue)
@@ -231,9 +232,10 @@ func TimeCheck3(receiveID string, receivers []string, msgTemplate string, number
 	for _, receiver := range receivers {
 		if _, ok := config.MsgQueue[receiver+number+gitHubEvent]; ok {
 			if config.MsgQueue[receiver+number+gitHubEvent] == constants.Unread3 {
-				msgTemplate = MsgTemplateUpgrade(msgTemplate, receiver)
+				msgTemplate = MsgTemplateUpgrade(msgTemplate)
+				msgTemplate_ := fmt.Sprintf(msgTemplate, receiver)
 				// 如果第三次未读，则从队列清除，并发送群消息
-				_, err := SendGroupMessage(receiveID, msgTemplate)
+				_, err := SendGroupMessage(receiveID, msgTemplate_)
 				if err != nil {
 					log.Errorf("send message error: %+v", err)
 				}
