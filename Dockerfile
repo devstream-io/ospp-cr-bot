@@ -21,5 +21,6 @@ RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
 WORKDIR /
 COPY --from=builder /builder/server .
 COPY --from=builder /builder/common.yaml .
+COPY --from=builder /builder/.env .
 
 EXPOSE 9000
