@@ -24,11 +24,11 @@ jobs:
         run: |
           echo ${{ secrets.REGISTRY_PASSWORD }} | docker login ccr.ccs.tencentyun.com -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
       - name: Build
-        env:
-          LarkAppId: ${{ secrets.LARKAPPID }}
-          LarkAppSecret: ${{ secrets.LARKAPPSECRET }}
-          VerificationToken: ${{ secrets.VERIFICATIONTOKEN }}
-          EncryptKey: ${{ secrets.ENCRYPTKEY }}
         run: |
+          echo "LarkAppId= ${{ secrets.LARKAPPID }} " > .env
+          echo "LarkAppSecret= ${{ secrets.LARKAPPSECRET }} " >> .env
+          echo "VerificationToken= ${{ secrets.VERIFICATIONTOKEN }} " >> .env
+          echo "EncryptKey= ${{ secrets.ENCRYPTKEY }} " >> .env
+          
           docker build -t ccr.ccs.tencentyun.com/lyle/cr-bot -f ./Dockerfile . 
           docker push ccr.ccs.tencentyun.com/lyle/cr-bot:latest
