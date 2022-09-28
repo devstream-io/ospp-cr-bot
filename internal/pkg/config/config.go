@@ -5,12 +5,18 @@ import (
 	"github.com/lyleshaw/ospp-cr-bot/internal/pkg/constants"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"time"
 )
 
 var (
-	Cfg      *Config
-	LarkMaps map[string]Maps
-	MsgQueue map[string]constants.MsgType
+	Cfg           *Config
+	LarkMaps      map[string]Maps
+	MsgQueue      map[string]constants.MsgType
+	TimeUnread1   time.Duration // PR/Issue 消息第一次发送消息后若未读，经过 TimeUnread1 后重发
+	TimeUnread2   time.Duration // PR/Issue 消息第二次发送消息后若未读，经过 TimeUnread2 后发送给上级
+	TimeUnread3   time.Duration // PR/Issue 消息第三次发送消息后若未读，经过 TimeUnread3 后抄送群聊
+	CommentUnread time.Duration // Comment 消息第一次发送后若未读，经过 CommentUnread 后抄送群聊
+
 )
 
 type Config struct {
@@ -59,6 +65,12 @@ func InitConfig() {
 	for _, i := range Cfg.Maps {
 		LarkMaps[i.Github] = i
 	}
+
+	TimeUnread1 = time.Duration(Cfg.Scheduler.TimeUnread1) * time.Minute     // PR/Issue 消息第一次发送消息后若未读，经过 TimeUnread1 后重发
+	TimeUnread2 = time.Duration(Cfg.Scheduler.TimeUnread2) * time.Minute     // PR/Issue 消息第二次发送消息后若未读，经过 TimeUnread2 后发送给上级
+	TimeUnread3 = time.Duration(Cfg.Scheduler.TimeUnread3) * time.Minute     // PR/Issue 消息第三次发送消息后若未读，经过 TimeUnread3 后抄送群聊
+	CommentUnread = time.Duration(Cfg.Scheduler.CommentUnread) * time.Minute // Comment 消息第一次发送后若未读，经过 CommentUnread 后抄送群聊
+
 }
 
 func QueryReceiveIDByRepo(repo string) (string, error) {
