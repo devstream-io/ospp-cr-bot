@@ -1,0 +1,34 @@
+name: Go
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    environment: cr-bot-build-docker
+    env:
+      GO111MODULE: on
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+      - name: Set up Go 1.17
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+      - name: Login Resigtry
+        if: github.event_name == 'push'
+        run: |
+          echo ${{ secrets.REGISTRY_PASSWORD }} | docker login ccr.ccs.tencentyun.com -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+      - name: Build
+        run: |
+          echo "LarkAppId= ${{ secrets.LARKAPPID }} " > .env
+          echo "LarkAppSecret= ${{ secrets.LARKAPPSECRET }} " >> .env
+          echo "VerificationToken= ${{ secrets.VERIFICATIONTOKEN }} " >> .env
+          echo "EncryptKey= ${{ secrets.ENCRYPTKEY }} " >> .env
+          
+          docker build -t ccr.ccs.tencentyun.com/lyle/cr-bot -f ./Dockerfile . 
+          docker push ccr.ccs.tencentyun.com/lyle/cr-bot:latest

@@ -129,7 +129,7 @@ func GitHubWebHook(c *gin.Context) {
 		}
 
 		// 定时未读则转发群聊
-		time.AfterFunc(constants.CommentUnread, func() {
+		time.AfterFunc(config.CommentUnread, func() {
 			issueCommentMsg = lark.MsgTemplateUpgrade(issueCommentMsg)
 			for _, receiver := range atPeople {
 				if _, ok := config.MsgQueue[receiver+number+string(gitHubEvent)]; ok {
@@ -325,7 +325,7 @@ func GitHubWebHook(c *gin.Context) {
 		}
 
 		// 定时未读则转发群聊
-		time.AfterFunc(constants.CommentUnread, func() {
+		time.AfterFunc(config.CommentUnread, func() {
 			prReviewMsg = lark.MsgTemplateUpgrade(prReviewMsg)
 			for _, receiver := range atPeople {
 				if _, ok := config.MsgQueue[receiver+number+string(gitHubEvent)]; ok {
@@ -412,7 +412,7 @@ func GitHubWebHook(c *gin.Context) {
 		}
 
 		// 定时未读则转发群聊
-		time.AfterFunc(constants.CommentUnread, func() {
+		time.AfterFunc(config.CommentUnread, func() {
 			prCommentMsg = lark.MsgTemplateUpgrade(prCommentMsg)
 			for _, receiver := range atPeople {
 				if _, ok := config.MsgQueue[receiver+number+string(gitHubEvent)]; ok {

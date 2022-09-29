@@ -35,7 +35,7 @@ func main() {
 	router.POST("/api/lark/callback", lark.Callback)
 	router.POST("/api/lark/cardCallback", lark.CardCallback)
 
-	err := router.Run(":3000")
+	err := router.Run(":9000")
 	if err != nil {
 		return
 	}

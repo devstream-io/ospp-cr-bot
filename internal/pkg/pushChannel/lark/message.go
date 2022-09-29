@@ -164,7 +164,7 @@ func SendMessages(receiveID string, receivers []string, msgTemplate string, numb
 		}
 	}
 	// 设置定时任务
-	time.AfterFunc(constants.TimeUnread1, func() {
+	time.AfterFunc(config.TimeUnread1, func() {
 		TimeCheck1(receiveID, receivers, msgTemplate, number, gitHubEvent)
 	})
 }
@@ -189,7 +189,7 @@ func TimeCheck1(receiveID string, receivers []string, msgTemplate string, number
 		}
 	}
 	// 设置定时任务
-	time.AfterFunc(constants.TimeUnread2, func() {
+	time.AfterFunc(config.TimeUnread2, func() {
 		TimeCheck2(receiveID, receivers, msgTemplate, number, gitHubEvent)
 	})
 }
@@ -223,7 +223,7 @@ func TimeCheck2(receiveID string, receivers []string, msgTemplate string, number
 		}
 	}
 	// 设置定时任务
-	time.AfterFunc(constants.TimeUnread3, func() {
+	time.AfterFunc(config.TimeUnread3, func() {
 		TimeCheck3(receiveID, receivers, msgTemplate, number, gitHubEvent)
 	})
 }
