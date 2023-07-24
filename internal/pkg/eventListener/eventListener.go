@@ -48,7 +48,6 @@ func GitHubWebHook(c *gin.Context) {
 
 	body, _ := ioutil.ReadAll(c.Request.Body)
 	bodyStr := string(body)
-	bodyStr = bodyStr[8:]
 	bodyStr, _ = url.QueryUnescape(bodyStr)
 
 	gitHubEvent := Event(event)

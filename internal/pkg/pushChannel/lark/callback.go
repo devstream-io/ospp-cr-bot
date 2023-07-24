@@ -48,7 +48,7 @@ func Callback(c *gin.Context) {
 
 	// 发送消息
 	var groupIdMsg string
-	if messageCallBackResp.Event.Message.Content == "{\"text\":\"ID\"}" {
+	if messageCallBackResp.Event.Message.Content == "{\"text\":\"@_user_1\"}" {
 		t := fasttemplate.New(messageTemplate.SendIdMsg, "{{", "}}")
 		groupIdMsg = t.ExecuteString(map[string]interface{}{
 			"ChatID": messageCallBackResp.Event.Sender.SenderID.OpenID,
